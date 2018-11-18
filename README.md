@@ -7,7 +7,7 @@
 	```
 1. Change to directory:
 	```
-	cd mhb-api
+	cd propertyGuru
 	```
 1. Install required gems
 	```
