@@ -1,0 +1,11 @@
+plan name,base price,base sqft,base bed,max bed,base bath,max bath,base garage,max garage,base stories,max stories,style,image
+Juniper,309000,2170,4,4,3,3,2,2,1,1,Ranch,Gehan/Juniper/featured.jpg
+Sycamore,359000,3267,5,5,2.5,2.5,2,2,2,2,Ranch,Gehan/Sycamore/featured.jpg
+Rosewood,303400,3050,4,4,2.5,2.5,2,2,2,2,Western,Gehan/Rosewood/featured.jpg
+Redwood,295500,2802,4,4,2.5,2.5,2,2,2,2,Craftsman,Gehan/Redwood/featured.jpg
+Mimosa,294000,2731,4,4,2.5,2.5,2,2,2,2,Italian,Gehan/Mimosa/featured.jpg
+Magnolia,284000,2641,3,3,2.5,2.5,2,2,2,2,Ranch,Gehan/Magnolia/featured.jpg
+Yaupon,289000,2455,4,4,2.5,2.5,2,2,2,2,Mission,Gehan/Yaupon/featured.jpg
+Laurel,242350,2016,3,3,2,2,2,2,1,1,Western,Gehan/Laurel/featured.jpg
+Palm,239500,1967,3,3,2,2,2,2,1,1,Contemporary,Gehan/Palm/featured.jpg
+Mahogany,229000,1847,3,3,2,2,2,2,1,1,Colonial,Gehan/Mahogany/featured.jpg

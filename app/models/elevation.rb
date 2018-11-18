@@ -1,0 +1,8 @@
+class Elevation < ApplicationRecord
+  belongs_to :plan
+  validates_presence_of :name, :price
+
+  has_attached_file :image
+  validates_attachment_content_type :image, content_type: /\Aimage\/.*\z/
+
+end

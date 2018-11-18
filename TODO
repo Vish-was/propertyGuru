@@ -1,0 +1,8 @@
+TODO
+
+- [M] add geocoding support to lots
+	* https://github.com/alexreisner/geocoder
+- [M] add plans.location attribute query support
+	* ie Lot.near([40.71, -100.23], 50)
+- [M] Logging
+- [M] Audit

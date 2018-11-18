@@ -1,0 +1,35 @@
+# PostgreSQL
+
+default: &default
+  database: <%= ENV['DB_DBNAME'] || 'mhb1' %>
+  username: "postgres" #<%= ENV['DB_USERNAME'] || 'mhb' %>
+  password: "postgres" #<%= ENV['DB_PASSWORD'] || 'mhb' %>
+  host: <%= ENV['DB_HOSTNAME'] || 'localhost' %>
+  port: <%= ENV['DB_PORT'] || '5432' %>
+  adapter: postgis
+  schema_search_path: public
+  encoding: unicode
+  pool: 5
+
+# default: &default
+#   database: "mhb_staging" #<%= ENV['DB_DBNAME'] || 'mhb' %>
+#   username: "mhb_admin" #<%= ENV['DB_USERNAME'] || 'mhb' %>
+#   password: "V1a9s9u3de1" #<%= ENV['DB_PASSWORD'] || 'mhb' %>
+#   host: "mhb-staging.c5crrsento8y.us-west-2.rds.amazonaws.com" #<%= ENV['DB_HOSTNAME'] || 'localhost' %>
+#   port: <%= ENV['DB_PORT'] || '5432' %>
+#   adapter: postgis
+#   schema_search_path: public
+#   encoding: unicode
+#   pool: 5
+
+
+development:
+  <<: *default
+  # su_username: superuser
+  # su_password: superuser
+test:
+  <<: *default
+staging:
+  <<: *default
+production:
+  <<: *default

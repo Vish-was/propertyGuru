@@ -1,0 +1,2 @@
+json.(@division, :name)
+
