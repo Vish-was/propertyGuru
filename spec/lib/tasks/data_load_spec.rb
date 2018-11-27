@@ -15,6 +15,7 @@ RSpec.describe "data_load", type: :rake do
   let!(:plan_option) { create(:plan_option, plan_option_set_id: plan_option_set.id) }
   let!(:elevation) { create(:elevation, plan_id: plan.id) }
   let!(:vr_scene) { create(:vr_scene, plan_id: plan.id) }
+  let!(:plan_image) { create(:plan_image, plan_id: plan.id) }
   let!(:vr_hotspot) { create(:vr_hotspot, vr_scene_id: vr_scene.id) }
   let(:verbose) { false }
 
@@ -133,4 +134,30 @@ RSpec.describe "data_load", type: :rake do
       end
     end
   end
+  describe 'Load plan_base_images_load' do
+    let(:plan_base_images_load) { self.class.top_level_description }
+    let(:task_path) { "lib/tasks/#{plan_base_images_load.split(":").first}" }
+    subject         { rake[plan_base_images_load] }
+    context "when builder exist" do
+      before do
+        Rake.application = rake
+        Rake.application.rake_require(task_path, [Rails.root.to_s])
+        Rake::Task.define_task(:environment)
+        load File.join(Rails.root.to_s, 'lib/tasks/data_load.rake')
+        header = "plan name,story,2d file"
+        data_new = "#{plan.name},1,#{Rails.root.to_s}/spec/lib/tasks/missing_images/plan_images.png\n#{plan.name},2,#{Rails.root.to_s}/spec/lib/tasks/missing_images/plan_images.png"
+        File.open("spec/lib/tasks/plan_images.csv", 'w') { |file| file.write("#{header}\n#{data_new}\n#{data_new}")}
+        Rake.application.invoke_task("data_load:vr_load[#{builder_id},#{Rails.root.to_s+'/spec/lib/tasks/plan_images.csv'},#{verbose}]")
+        File.delete "spec/lib/tasks/plan_images.csv"
+      end
+      it "should create all plan_images of this plan" do
+        expect(plan.plan_images.length).to be > 0
+      end
+    end
+    context "when builder does not exist" do
+      it 'returns a not found message' do
+        puts "arguments required"
+      end
+    end
+  end  
 end

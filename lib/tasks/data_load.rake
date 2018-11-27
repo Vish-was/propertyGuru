@@ -275,5 +275,49 @@ namespace :data_load do
       end
     end
   end
+  desc "Load plan_base_images_load"
+  task :plan_base_images_load, [:builder_id, :plan_base_images_file, :verbose] => :environment do |t, args|
+    args.with_defaults(verbose: true)
+    verbose = ActiveModel::Type::Boolean.new.cast(args[:verbose])
+    puts "Builder ID: #{args[:builder_id]}" if verbose
+    puts "PlanBaseImage file: #{args[:plan_base_images_file]}\n\n" if verbose
+    if args.plan_base_images_file.blank? or args.builder_id.blank?
+      puts "arguments required" if verbose
+      exit
+    end
+    builder = Builder.find(args.builder_id)
+    exit unless builder.present?
+    puts "Builder #{builder.name} found" if verbose
+    CSV.foreach(args[:plan_base_images_file], :headers => true) do |row|
+      plan = Plan.joins(:collection=>[:region=>:builder]).where('builders.id = ? and plans.name = ?', args.builder_id, row['plan name']).first
+      if plan.blank?
+        puts "Could not find plan #{row['plan name']} for builder #{builder.name}. Skipping..." if verbose
+        next
+      end
+      unless row['2d file'].blank? || row['story'].blank?
+        plan_image = PlanImage.where('plan_id = ? and story = ?', plan.id, row['story']).first
+        if plan_image.present?
+          plan_image.update(
+            plan: plan,
+            story: row['story'], 
+            base_image: File.open(row['2d file']))
+          puts "Plan image updated" if verbose   
+        else
+          plan_image = PlanImage.new(
+            plan: plan,
+            story: row['story'],
+            base_image: File.open(row['2d file']))
+          if plan_image.save
+            puts "New PlanImage created!" if verbose
+          else
+            puts "PlanImage failed: #{plan_image.errors.messages}" if verbose
+          end
+        end
+      else
+        puts "Could not find plan image. Skipping..." if verbose
+        next
+      end
+    end
+  end  
 end
 
