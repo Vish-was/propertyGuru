@@ -40,13 +40,14 @@ class Plan < ApplicationRecord
   scope :has_reduced_price, -> () { }
   scope :location, -> (location_id) {  }
   scope :within_miles, -> (miles) {  }
+  scope :plan_style_ids, -> (plan_style_ids) { joins(:plans_plan_styles).where(["plan_style_id IN (?)", plan_style_ids.split(',').map(&:to_i)])}
 
 
   def self.filtering_params(params)
     params.slice(:location, :within_miles, :minimum_price, :maximum_price,
       :minimum_size, :maximum_size, :minimum_bedrooms,
       :minimum_bathrooms, :minimum_garages, :minimum_stories,
-      :starts_with, :popular_top, :has_reduced_price, :builder_id)
+      :starts_with, :popular_top, :has_reduced_price, :builder_id, :plan_style_ids)
   end
 
 end

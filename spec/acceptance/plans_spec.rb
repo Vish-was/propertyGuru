@@ -20,6 +20,7 @@ resource "Plans" do
   let!(:id) { plan_to_test.id }
   let!(:communities_plan) { create(:communities_plan, community_id: community.id, plan_id: plans.first.id) }
   let!(:user) { create(:user) }
+  let!(:plan_styles) { create_list(:plan_style, 10) }
   let(:page_size) { Faker::Number.between(1, plans.size) }
   let(:page_number) { Faker::Number.between(1, 10) }
 
@@ -31,7 +32,8 @@ resource "Plans" do
       minimum_bedrooms: Faker::Number.between(0,5),
       minimum_bathrooms: Faker::Number.between(0,5),
       minimum_garages: Faker::Number.between(0,5),
-      minimum_stories: Faker::Number.between(0,3)
+      minimum_stories: Faker::Number.between(0,3),
+      plan_style_ids: plan_styles.map(&:id).join(', ')
     }}
 
 
@@ -50,7 +52,7 @@ resource "Plans" do
     parameter :minimum_stories, "The minimum number of stories of plan"
     parameter :downtown_importance, "A number on a scale of 0-100 signifying how important living downtown is to the user"
     parameter :attractions, "An array of attractions a user would want to live near"
-    parameter :styles, "An array of home styles the user prefers"
+    parameter :plan_style_ids, "An array of home styles the user prefers"
 
     example "List all plans" do
       do_request
@@ -173,6 +175,14 @@ resource "Plans" do
 
       do_request(valid_parameters)
       expect(response_size).to eq(paged_size(scoped_plans))
+      expect(status).to eq(200)
+    end
+
+    example "List all plans, restricted by plan_style_ids" do
+      plan_style_ids = valid_parameters[:plan_style_ids]
+      do_request(plan_style_ids: plan_style_ids)
+      scoped_plans_size = Plan.plan_style_ids(plan_style_ids).length
+      expect(response_size).to eq(scoped_plans_size)
       expect(status).to eq(200)
     end
 
