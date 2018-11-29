@@ -18,6 +18,9 @@ class User < ActiveRecord::Base
 
   validates_presence_of :email, :profile
 
+  has_attached_file :image
+  validates_attachment_content_type :image, content_type: /\Aimage\/.*\z/
+
   scope :email_like, -> (email_substring) { where "email ilike ?", "%#{email_substring}%" }
   scope :name_like, -> (name_substring) { where "name ilike ?", "%#{name_substring}%" }
 

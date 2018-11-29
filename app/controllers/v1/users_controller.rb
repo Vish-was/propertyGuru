@@ -62,7 +62,7 @@ module V1
         :confirmation_sent_at, :unconfirmed_email,
         :failed_attempts, :unlock_token,
         :locked_at, :email, :tokens, 
-        :created_at, :updated_at)
+        :created_at, :updated_at, :image)
     end
 
     def set_user
