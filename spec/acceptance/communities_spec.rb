@@ -65,6 +65,8 @@ resource "Communities" do
     parameter :location, "location of community"
     parameter :yearly_hoa_fees
     parameter :property_tax_rate
+    parameter :image
+    parameter :information
 
     example_request "Create a new Community" do
       name = Faker::Name.name 
@@ -86,6 +88,8 @@ resource "Communities" do
     parameter :location, "location of community"
     parameter :yearly_hoa_fees
     parameter :property_tax_rate
+    parameter :image
+    parameter :information
 
     example_request "Rename a Community" do
       name = Faker::Name.name 
