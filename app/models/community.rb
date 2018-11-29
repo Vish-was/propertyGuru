@@ -14,6 +14,9 @@ class Community < ApplicationRecord
   validates_presence_of :name
   validates_presence_of :location
 
+  has_attached_file :image
+  validates_attachment_content_type :image, content_type: /\Aimage\/.*\z/
+
   scope :starts_with, -> (starts_with) { where "lower(communities.name) like ?", "#{starts_with}%".downcase}
   
   def self.filtering_params(params)

@@ -127,7 +127,7 @@ module V1
     private
 
     def community_params
-      params.permit(:name, :location,:yearly_hoa_fees, :property_tax_rate)
+      params.permit(:name, :location,:yearly_hoa_fees, :property_tax_rate, :image, :information)
     end
 
     def communities_plans_params
