@@ -13,7 +13,11 @@ RSpec.describe 'Users API', type: :request do
   let!(:user_viewed_plan) { create(:user_viewed_plan, user_id: user_to_test.id, plan_id: plan.id) }
   let!(:valid_attributes) {{
     name:  Faker::Space.galaxy,
-    email: Faker::Internet.email
+    email: Faker::Internet.email,
+    image_file_name:  Faker::File.file_name,
+    image_content_type: "image/png",
+    image_file_size: Faker::Number.between(10000,500000),
+    image_updated_at: DateTime.now
   }}
 
 

@@ -145,6 +145,7 @@ resource "Users" do
 
   put "/users/:id" do
     parameter :name, "Full name to change"
+    parameter :image, "Image of user"
     before(:each) do
       @user = user_to_test
       allow_any_instance_of(ApplicationController).
