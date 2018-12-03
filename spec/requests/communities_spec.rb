@@ -18,6 +18,7 @@ RSpec.describe 'Communities API', type: :request do
   let(:plan_id) { plan.id }
   let!(:community_to_test) { communities.sample }
   let!(:id) { community_to_test.id }
+  let!(:community_gallery) { create(:community_gallery, community_id: community_to_test.id) }
   let!(:valid_attributes) {{
     name:  Faker::Space.galaxy,
     location:  Faker::TwinPeaks.location,
@@ -25,6 +26,10 @@ RSpec.describe 'Communities API', type: :request do
     property_tax_rate: Faker::Number.decimal(6,2),
     division_id: division.id
   }}
+  let!(:gallery_valid_attributes) {{
+    image:  fixture_file_upload("#{Rails.root}/public/missing_images/plan_images.png", 'image/png'),
+    community_id: id 
+  }} 
   # Get /divisions/:division_id/communities
   describe '/divisions/:division_id/communities' do
     before { 
@@ -1421,6 +1426,82 @@ RSpec.describe 'Communities API', type: :request do
       
       it 'returns status code 401' do
         expect(response).to have_http_status(401)
+      end
+    end
+  end
+  # Get all CommunityGallery of plan_id 
+  describe 'GET /communities/:id/gallery' do
+    context 'when community exists' do
+      before {
+        get "/communities/#{id}/gallery", as: :json
+      }
+      it 'returns status code 200' do
+        expect(response).to have_http_status(200)
+      end
+      it 'returns all community_gallery' do
+        expect(json["results"].size).to eq(1)
+      end
+    end
+    context 'when community does not exist' do
+      before {
+        get "/communities/#{id}/gallery", as: :json
+      }
+      let(:id) { 0 }
+
+      it 'returns status code 404' do
+        expect(response).to have_http_status(404)
+      end
+
+      it 'returns a not found message' do
+        expect(response.body).to match(/Couldn't find Community/)
+      end
+    end
+  end
+  # POST /communities/:plan_id/gallery
+  describe '# POST /communities/:community_id/gallery' do 
+   context 'when logged in user is admin' do
+      before { 
+        @user = user
+        @user.add_role(:admin)
+      }
+      sign_in :user
+      context 'when the request is valid' do
+        before {post "/communities/#{id}/gallery", params: gallery_valid_attributes }
+        it 'returns status code 201' do 
+          expect(response).to have_http_status(201)
+        end
+      end
+      context 'when the request is invalid' do
+        before { post "/communities/#{id}/gallery", params: { } }
+        it 'returns status code 422' do
+          expect(response).to have_http_status(422)
+        end
+        it 'returns a validation failure message' do
+          expect(response.body).to match(/Image can't be blank/)
+        end
+      end
+    end
+    context 'when logged in user is builder' do
+      before { 
+        @user = user
+        @user.add_role(:builder)
+      }
+      sign_in :user
+      context 'when the request is valid' do
+        before { 
+          post "/communities/#{id}/gallery", params: gallery_valid_attributes }
+        it 'returns status code 201' do        
+          expect(response).to have_http_status(201)
+        end
+      end
+      context 'when the request is invalid' do
+        before { post "/communities/#{id}/gallery", params: { } }
+        it 'returns status code 422' do
+          expect(response).to have_http_status(422)
+        end
+        it 'returns a validation failure message' do
+          expect(response.body).to match(/Image can't be blank/)
+        end
       end
     end
   end

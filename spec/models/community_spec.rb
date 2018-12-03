@@ -9,6 +9,7 @@ RSpec.describe Community, type: :model do
   it { should have_many(:community_plan_options) }
   it { should have_many(:plan_options).through(:community_plan_options) }
   it { should have_and_belong_to_many(:amenities) }
+  it { should have_many(:community_gallery).dependent(:destroy) }
   # Validation test
   # ensure column name is present before saving
   it { should validate_presence_of(:name) }
