@@ -35,6 +35,8 @@ Rails.application.routes.draw do
       post 'plans/:plan_id', on: :member, to: 'communities#create_communities_plans'
       put "plans/:plan_id", on: :member, to: 'communities#update_communities_plans'    
       delete 'plans/:plan_id', on: :member, to: 'communities#destroy_communities_plans'
+      post 'gallery', on: :member, to: 'communities#create_gallery'
+      get :gallery, on: :member
 
       get :amenities, on: :member
       post 'amenities/:amenity_id', on: :member, to: 'communities#create_communities_amenities'
@@ -73,7 +75,9 @@ Rails.application.routes.draw do
       get :lots, on: :member
       post 'lots/:lot_id', on: :member, to: 'plans#create_plans_lots'
       delete 'lots/:lot_id', on: :member, to: 'plans#destroy_plans_lots'
-      get :viewed_users, on: :member 
+      get :viewed_users, on: :member
+      get :gallery, on: :member
+      post 'gallery', on: :member, to: 'plans#create_gallery' 
 
 
       resources :plan_option_sets, only: [:index, :create]
@@ -127,5 +131,7 @@ Rails.application.routes.draw do
     end
     
     resources :plan_rooms, only: %I[index]
+    resources :plan_gallery, only: %I[destroy]
+    resources :community_gallery, only: %I[destroy]  
   end
 end

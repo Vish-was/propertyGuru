@@ -16,6 +16,7 @@ resource "Communities" do
   let!(:plan) { create(:plan,  collection_id: collection.id)}
   let!(:amenity) { create(:amenity)}
   let(:value) { Faker::Name.name }
+  let!(:community_gallery) { create_list(:community_gallery, 10, community_id: community_to_test.id) }
 
   let(:page_size) { Faker::Number.between(1, communities.size) }
   let(:page_number) { Faker::Number.between(1, 10) }
@@ -246,6 +247,43 @@ resource "Communities" do
       do_request(id: id, amenity_id: amenity.id)
 
       expect(status).to eq(200)
+    end
+  end
+
+  get "communities/:id/gallery" do
+   example_request "Get a all community gallery" do
+      expect(status).to eq(200)
+    end
+    example "Get community gallery, limited by page size" do
+      do_request(per_page: page_size)
+      result_compare_with_db(json, CommunityGallery)
+      expect(status).to eq(200)
+    end
+
+    example_request "Get community gallery, with paging" do
+      do_request(per_page: page_size, page: 2)
+      result_compare_with_db(json, CommunityGallery)
+      expect(status).to eq(200)
+    end
+    example_request "Get community gallery, with random page" do
+      do_request(per_page: page_size, page: page_number)
+      result_compare_with_db(json, CommunityGallery)
+      expect(status).to eq(200)
+    end
+  end 
+
+  post "/communities/:id/gallery" do
+    before(:each) do
+      check_login(user)
+    end
+    parameter :image, "image of the community"
+    parameter :community_id, "id of the community"
+    
+    example_request "Create a new community_gallery from plan" do
+      image = Rack::Test::UploadedFile.new("#{Rails.root}/public/missing_images/plan_images.png", 'image/png')
+      
+      do_request(image: image, community_id: id)
+      expect(status).to eq(201)
     end
   end
 end

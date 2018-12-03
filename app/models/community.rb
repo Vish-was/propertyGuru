@@ -8,6 +8,7 @@ class Community < ApplicationRecord
   has_many :plan_options, :through => :community_plan_options
 
   has_and_belongs_to_many :amenities, :join_table => :communities_amenities
+  has_many :community_gallery, dependent: :destroy
 
   accepts_nested_attributes_for :communities_plans
 

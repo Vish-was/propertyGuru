@@ -124,6 +124,21 @@ module V1
       end
     end
 
+    #GET /communities/:id/gallery 
+    def gallery
+     @paged = @community.community_gallery.paged(params)
+    end
+
+    #POST /communities/:id/gallery 
+    def create_gallery
+      @community_gallery = @community.community_gallery.new(community_gallery_params)
+      if @community_gallery.save
+        json_response(@community_gallery, :created)
+      else
+        json_response_error(@community_gallery.errors.full_messages)
+      end
+    end  
+
     private
 
     def community_params
@@ -148,6 +163,10 @@ module V1
 
     def set_amenity
       @amenity = Amenity.find_by!(id: params[:amenity_id])
+    end
+
+    def community_gallery_params
+      params.permit(:plan_id, :image)
     end
   end
 end
