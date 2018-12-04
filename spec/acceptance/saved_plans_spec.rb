@@ -33,6 +33,8 @@ resource "SavedPlans" do
     parameter :per_page, "How many results per page (default 20)"
     parameter :customized, "Only show customized or non-customized saved plans (value does not matter)"
     parameter :not_customized, "Only show customized or non-customized saved plans (value does not matter)"
+    parameter :is_favorite
+    parameter :is_public
 
     before(:each) do
       @user = user
@@ -122,7 +124,9 @@ resource "SavedPlans" do
     parameter :completed_at, "The datetime at which the build was completed"
     parameter :name, "Optional user-generated name for the saved plan"
     parameter :description, "User-generated description for the saved search"
-    
+    parameter :is_favorite
+    parameter :is_public
+
     before(:each) do
       @user = user
       @user.add_role(:admin)
@@ -153,7 +157,9 @@ resource "SavedPlans" do
     parameter :ordered_at, "The datetime at which the build was ordered"
     parameter :name, "Optional user-generated name for the saved plan"
     parameter :description, "User-generated description for the saved search"
-
+    parameter :is_favorite
+    parameter :is_public
+    
     before(:each) do
       check_login(user)
     end

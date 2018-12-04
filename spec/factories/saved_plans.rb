@@ -4,5 +4,7 @@ FactoryBot.define do
     user_id nil
     name { Faker::Space.galaxy }
     description { Faker::ChuckNorris.fact }
+    is_favorite false
+    is_public false
   end
 end
