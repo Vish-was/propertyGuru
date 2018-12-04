@@ -11,9 +11,11 @@ class SavedPlan < ApplicationRecord
   # Removed plan_option_ids might be need to check some other conditions
   scope :customized,     -> (ignored) { eager_load(:saved_plan_options).where("saved_plan_options.id IS NOT NULL") }
   scope :not_customized, -> (ignored) { eager_load(:saved_plan_options).where("saved_plan_options.id IS NULL") }
-
+  scope :is_favorite, -> (is_favorite) { }
+  scope :is_public, -> (is_public) { }
+  
   def self.filtering_params(params)
-    params.slice(:customized, :not_customized)
+    params.slice(:customized, :not_customized, :is_favorite, :is_public)
   end
 
   def vr_scene_images
