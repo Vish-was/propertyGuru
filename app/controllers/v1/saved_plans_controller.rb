@@ -61,7 +61,7 @@ module V1
 
     def saved_plan_params
       params.permit(:user_id, :plan_id, :elevation_id, :contact_id, :quoted_price,
-                    :ordered_at, :completed_at, :name, :description, :is_favorite, :is_public)
+                    :ordered_at, :completed_at, :name, :description, :is_favorite, :is_public, :community_id)
     end
 
     def set_user

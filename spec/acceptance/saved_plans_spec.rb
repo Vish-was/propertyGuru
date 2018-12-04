@@ -126,6 +126,7 @@ resource "SavedPlans" do
     parameter :description, "User-generated description for the saved search"
     parameter :is_favorite
     parameter :is_public
+    parameter :community_id, "ID of the community associated with the saved plan"
 
     before(:each) do
       @user = user
@@ -159,6 +160,7 @@ resource "SavedPlans" do
     parameter :description, "User-generated description for the saved search"
     parameter :is_favorite
     parameter :is_public
+    parameter :community_id, "ID of the community associated with the saved plan"
     
     before(:each) do
       check_login(user)

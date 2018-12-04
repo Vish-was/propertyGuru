@@ -1,4 +1,4 @@
-json.(@saved_plan, :quoted_price, :name, :description, :is_favorite, :is_public)
+json.(@saved_plan, :quoted_price, :name, :description, :is_favorite, :is_public, :community_id)
 
 json.user_name @saved_plan.user.name if @saved_plan.user
 json.elevation_name @saved_plan.elevation.name if @saved_plan.elevation.present?
